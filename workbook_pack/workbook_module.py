@@ -6,9 +6,9 @@ from pandas import ExcelWriter
 '''
 author: HLA
 GitHub: https://github.com/Kyouichirou
-version: 1.0
+version: 1.1
 license: MIT
-update: 2022-12-05
+update: 2022-12-24
 description: 自定义pandas的数据存储
 '''
 
@@ -46,7 +46,11 @@ class Workbook:
 
     @staticmethod
     def _get_data_gbk_len(data) -> int:
-        return len(str(data).encode('gbk'))
+        text = str(data)
+        try:
+            return len(text.encode('gb18030'))
+        except UnicodeError:
+            return len(text.encode('utf-8'))
 
     def write_to_sheet(self, dataframe, sheet_name: str, is_index=False) -> bool:
         print(f'write data to worksheet: {sheet_name}')
